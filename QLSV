@@ -1,0 +1,310 @@
+import java.util.Scanner;
+import java.util.Vector;
+import java.util.Enumeration;
+import java.util.Arrays;
+
+public class QuanLiSinhVien {
+ 
+	Vector<Student> list = new Vector<>();
+	Vector<Course> clist = new Vector<>();
+	
+	static Scanner sc = new Scanner(System.in);
+ 
+	public QuanLiSinhVien(){
+
+		while(true){      
+		  System.out.println("*-CHUONG TRINH QUAN LY SINH VIEN-*");
+		  System.out.println("*-Chuc nang chinh chuong trinh-*");
+		  System.out.println("  1. Nhap danh sach sinh vien   ");
+		  System.out.println("  2. Xem danh sach sinh vien   ");
+		  System.out.println("  3. Sap xep sach sinh vien tang dan diem trung binh   ");
+		  System.out.println("  4. Tim sinh vien theo ten   ");
+		  System.out.println("  5. Hien thi sinh vien hoc cung mot hoc phan   ");
+		  System.out.println("  6. Hien thi sinh vien theo chieu giam dan cua tin chi   ");
+		  System.out.println("  7. Hien thi sinh vien co diem cao nhat cua hoc phan   ");
+		  System.out.println("  0. Thoat   ");
+		  System.out.println("  _________________");
+
+		  System.out.print("  Nhap mot so de chon chuc nang: ");
+		  int key = sc.nextInt();
+		  
+		  switch(key)
+		  {
+		  case 1:
+			  this.input();
+			  break;
+		  case 2:
+			  this.view();
+			  break;
+		  case 3:
+			  sort();
+			  break;
+		  case 4:
+			  search();
+			  break;
+		  case 5:
+			  search_1();
+			  break;
+		  case 0:
+			  System.out.print("----  Chuong trinh ket thuc----- ");
+			  return;
+		  }
+	
+  } 	
+ }
+   
+   /*Nhap danh sach sinh vien*/
+   public void input()
+   {
+	int num;
+	System.out.print("  Nhap so luong sinh vien: ");
+	num = sc.nextInt();
+
+	for (int i=1;i<=num;i++)
+	{
+		System.out.println("  Nhap thong tin cho sinh vien thu: "+i); 
+		System.out.print("  ID: ");
+		int id = Integer.parseInt(sc.next());
+		
+		sc.nextLine();
+		System.out.print("  Ten: ");
+		String name = sc.nextLine();
+		
+		System.out.print("  So mon da hoc: ");
+		int n = sc.nextInt();
+		
+		Course[] courselist = new Course[n];
+		
+		for (int j=0;j<n;j++)
+		{
+			
+			System.out.println("  Nhap thong tin hoc phan: "+(j+1)); 
+			System.out.print("  ID: ");
+			
+			String courseId = sc.nextLine();
+			
+			sc.nextLine();
+			System.out.print("  Ten hoc phan: ");
+			String title = sc.nextLine();
+			
+			System.out.print("  So tin chi: ");
+			float credit = sc.nextFloat();
+
+			System.out.print("  Diem: ");
+			float note = sc.nextFloat();
+
+			courselist[j] = new Course(courseId,title,credit,note);	
+			clist.add(courselist[j]);
+		}
+				
+		Student st = new Student(id,name,n,courselist);
+	    list.add(st);
+    }
+    System.out.println("\n--------\n");
+   }
+   
+   //Xem danh sach sinh vien
+   public void view()
+   {
+	   
+	   System.out.println("  Thong tin danh sach sinh vien"); 
+	   Enumeration vEnum = list.elements();
+	   int i=1;
+	  
+	   while(vEnum.hasMoreElements()) 
+		{
+			Student sts = (Student)vEnum.nextElement();
+		
+		System.out.println("    "+i+". ID="+sts.getId()+", Ten="+sts.getName()+", Diem trung binh="+sts.getAver());
+		    i++;
+		
+		}
+	     System.out.println("\n--------\n");
+   }
+   
+  //Sap xep danh sach sinh vien tang dan theo diem trung binh 
+   public void sort()
+   {
+
+	   Student[] sts = new Student[list.size()];
+	   int index=0;
+ 
+	   Enumeration vEnum = list.elements();
+	   while(vEnum.hasMoreElements()) 
+		{
+		 sts[index] = (Student)vEnum.nextElement();
+		 index++;
+		}
+
+	   for (int i = 0; i<index-1; i++)
+		   for (int j =i+1; j<index; j++)
+		    if (sts[i].getAver()>sts[j].getAver())
+		    {
+		    	Student temp = sts[i];
+		    	sts[i] = sts[j];
+		    	sts[j] =temp;
+		    }
+	   
+		Arrays.sort(sts);
+		
+	     System.out.println("\n--Danh sach sinh vien sau khi sap xep--");
+     for(index=0; index < sts.length; index++)
+        {
+    	   System.out.println("    "+(index+1)+". ID="+sts[index].getId()+", Ten="+sts[index].getName()+", Diem trung binh="+sts[index].getAver());
+		  }
+       System.out.println("\n--------\n");
+       
+	  }
+   
+   //Tim sinh vien theo ten
+   public void search()
+   {
+		System.out.print(" Nhap ten sinh vien can tim: ");
+		sc.nextLine();
+		String name = sc.nextLine();
+		
+//	   	Enumeration vEnum = list.elements();
+	   	
+	    System.out.println("\n--Thong tin tim kiem duoc--");
+	    for (int i=0; i<list.size(); i++) {
+	    	if(list.get(i).getName().equals(name)==true) {
+	    		System.out.println("Name: " + list.get(i).getName());
+	    	}
+	    }
+//		while(vEnum.hasMoreElements()) 
+//		{
+//		Student sts = (Student)vEnum.nextElement();
+//		if (sts.getName().indexOf(name)!=-1)
+//		  System.out.println("ID="+sts.getId()+", Ten="+sts.getName()+", Diem trung binh="+sts.getAver());
+//		}
+	     System.out.println("\n--------\n");		
+   }
+   
+   //Hien thi sinh vien cung hoc mot hoc phan
+   public void search_1() {
+	   System.out.println("Nhap ten hoc phan: ");
+	   sc.nextLine();
+	   String tenhp = sc.nextLine();
+	   
+	   for(int i=0; i<list.size(); i++) {
+		   if(tenhp.equals(clist.get(i).getTitle())==true)
+			   System.out.println("ID="+list.get(i).getId()+", Ten="+list.get(i).getName()+", Diem trung binh="+list.get(i).getAver());
+	   }
+	   
+	   
+//	   Enumeration vEnum = list.elements();
+//	   Enumeration vEnum1 = clist.elements();
+//	   
+//	   System.out.println("\n--Thong tin tim kiem duoc--");
+//		while(vEnum.hasMoreElements()) 
+//		{
+//			
+//		Student sts = (Student)vEnum.nextElement();
+//		Course cr = (Course)vEnum1.nextElement();
+//		  if("Java".equals(cr.getTitle()))
+//			  System.out.println("ID="+sts.getId()+", Ten="+sts.getName()+", Diem trung binh="+sts.getAver());
+//		
+//		}
+	   
+	     System.out.println("\n--------\n");	
+   }
+   
+ public static void main(String[] args) 
+   {
+    new QuanLiSinhVien();
+   }
+}
+
+class Course 
+{
+	private String id;
+	private String title;
+	private float credit;
+	private float note;
+	
+public Course()
+{
+	this.id="";
+	this.title="";
+	this.credit=0.0f;
+	this.note=0.0f;
+}
+public Course(String id, String title, float credit, float note)
+{
+	this.id=id;
+	this.title=title;
+	this.credit=credit;
+	this.note=note;	
+}
+public String getId()
+{
+return this.id;
+}
+public String getTitle()
+{
+return this.title;
+}
+public float getcredit()
+{
+return this.credit;
+}
+public float getNote()
+{
+return this.note;
+}
+public float calNoteCredit()
+{
+	return this.credit*this.note;
+}
+}	
+
+class Student implements Comparable
+{
+	private int id;
+	private String name;
+	private int NoCourse;
+	private Course[] list;
+	private float aver;
+	public Student()
+	{
+		name = new String("");
+		id = 0;
+		aver=0;
+	}
+	public Student(int id, String name, int noCourse, Course[] list)
+	{
+		this.id = id;
+		this.name = name;
+		//aver=a;
+		this.NoCourse=noCourse;
+		this.list=list;
+		
+		float sumCredit=0;
+		float sumNote =0;
+		
+		for (int i=0;i<noCourse;i++)
+		{
+			sumCredit += this.list[i].getcredit();
+			sumNote += this.list[i].calNoteCredit();
+		}
+		this.aver = sumNote/sumCredit;
+		
+	}
+	public String getName()
+	{
+		return name;
+	}
+	public int getId()
+	{
+		return id;
+	}
+	public float getAver()
+	{
+		return aver;
+	}
+	public int compareTo(Object other) 
+	   {
+	    Student otherRect = (Student)other;
+	    return (int)(this.aver-otherRect.aver);
+	   }
+}
